@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>MM Dashboard — Kubah Emas</title>
+<meta name="theme-color" id="tc" content="#1C1E26">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MM Tracker">
+<link rel="apple-touch-icon" id="touch-icon">
+<link rel="manifest" id="pwa-manifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FAFAF3;--card:#FFF;--card2:#FFFDF0;--bdr:#E8E4D0;
+  --txt:#1C1E26;--txt2:#3D3D3A;--mut:#8A8678;
+  --pri:#F5C518;--pri-d:#D4A800;--pri-l:#FFFBEB;--pri-b:#FDE68A;
+  --ch:#1C1E26;
+  --grn:#16A34A;--grn-l:#F0FDF4;--grn-b:#BBF7D0;
+  --red:#DC2626;--red-l:#FEF2F2;--red-b:#FECACA;
+  --ylw:#D97706;--ylw-l:#FFFBEB;--ylw-b:#FDE68A;
+  --shd:0 2px 8px rgba(0,0,0,.07);--ovl:rgba(0,0,0,.5);
+  --font:'Poppins',-apple-system,sans-serif;
+  --c-gmb:#2563EB;--c-mkt:#7C3AED;--c-ads:#EA580C;--c-wa:#16A34A;
+}
+body.dark{
+  --bg:#0D0E10;--card:#161820;--card2:#1E2028;--bdr:#252830;
+  --txt:#E8E0C0;--txt2:#A09880;--mut:#5A5E68;
+  --pri:#F5C518;--pri-d:#B8960A;--pri-l:#1A1600;--pri-b:#3A3000;
+  --grn:#4ADE80;--grn-l:#0D2818;--grn-b:#14532D;
+  --red:#F87171;--red-l:#1A0606;--red-b:#7F1D1D;
+  --ylw:#FBBF24;--ylw-l:#1A1300;--ylw-b:#3A2800;
+  --shd:0 2px 8px rgba(0,0,0,.3);--ovl:rgba(0,0,0,.75);
+  --c-gmb:#60A5FA;--c-mkt:#A78BFA;--c-ads:#FB923C;--c-wa:#4ADE80;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--txt);height:100dvh;display:flex;flex-direction:column;overflow:hidden;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;transition:background .3s,color .3s}
+
+/* ── TOPBAR ── */
+.topbar{flex-shrink:0;background:var(--ch);padding:11px 16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto}
+.brand-main{font-size:14px;font-weight:700;color:var(--pri)}
+.brand-sub{font-size:10px;color:rgba(255,255,255,.4);font-weight:400;margin-top:1px}
+.topbar-right{display:flex;gap:8px;align-items:center}
+.icon-btn{width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.datebar{background:rgba(0,0,0,.25);padding:6px 16px;border-bottom:1px solid rgba(255,255,255,.05)}
+.datebar-inner{display:flex;justify-content:space-between;align-items:center;max-width:640px;margin:0 auto;font-size:11px;color:rgba(255,255,255,.45);font-weight:500}
+.date-hi{color:var(--pri);font-weight:600}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.inner{padding:14px 14px 20px;max-width:640px;margin:0 auto}
+
+/* ── BOTTOM NAV ── */
+.botnav{flex-shrink:0;background:var(--card);border-top:1px solid var(--bdr);display:flex;padding-bottom:env(safe-area-inset-bottom,0);transition:background .3s}
+.navbtn{flex:1;border:none;background:none;font-family:var(--font);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:9px 0;cursor:pointer;color:var(--mut);font-size:9px;font-weight:500;transition:color .15s;-webkit-tap-highlight-color:transparent}
+.navbtn.active{color:var(--pri)}
+.navbtn svg{width:20px;height:20px}
+
+/* ── HERO PROGRESS ── */
+.prog-hero{background:var(--ch);border-radius:14px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
+.prog-hero::after{content:'';position:absolute;top:-40%;right:-15%;width:180px;height:180px;background:rgba(245,197,24,.05);border-radius:50%}
+.ph-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;position:relative;z-index:1}
+.ph-title{font-size:11px;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em}
+.ph-score{font-size:13px;font-weight:700;color:var(--pri)}
+.ph-track{background:rgba(255,255,255,.12);border-radius:99px;height:6px;overflow:hidden}
+.ph-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--pri),#FFE066);transition:width .5s cubic-bezier(.4,0,.2,1)}
+.ph-pills{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;position:relative;z-index:1}
+.ph-pill{font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:20px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
+.ph-pill.done{background:rgba(245,197,24,.2);color:var(--pri)}
+
+/* ── TASK CARDS ── */
+.task-card{background:var(--card);border-radius:12px;margin-bottom:8px;box-shadow:var(--shd);overflow:hidden;border-left:3px solid var(--bdr);transition:background .3s}
+.task-card.gmb{border-left-color:var(--c-gmb)}
+.task-card.mkt{border-left-color:var(--c-mkt)}
+.task-card.ads{border-left-color:var(--c-ads)}
+.task-card.wa{border-left-color:var(--c-wa)}
+.task-card.st-selesai{opacity:.65}
+.task-meta{display:flex;align-items:center;gap:6px;padding:9px 12px 0;flex-wrap:wrap}
+.task-num{width:20px;height:20px;border-radius:5px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--mut);flex-shrink:0}
+.task-time{font-size:9.5px;color:var(--mut);font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pilar-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0;border:1px solid}
+.task-body{padding:6px 12px 9px;cursor:pointer}
+.task-act{font-size:12.5px;font-weight:500;color:var(--txt);line-height:1.5;margin-bottom:2px}
+.task-act.done{text-decoration:line-through;color:var(--mut)}
+.task-tgt{font-size:10.5px;color:var(--mut)}
+.task-footer{padding:0 12px 10px;display:flex;align-items:center;gap:8px}
+.st-badge{font-size:10px;font-weight:700;padding:4px 11px;border-radius:20px;cursor:pointer;border:1.5px solid;transition:all .15s;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.st-belum  {background:var(--card2);color:var(--mut);border-color:var(--bdr)}
+.st-selesai{background:var(--grn-l);color:var(--grn);border-color:var(--grn-b)}
+.st-kendala{background:var(--red-l);color:var(--red);border-color:var(--red-b)}
+.note-preview{flex:1;font-size:10.5px;color:var(--mut);font-style:italic;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.note-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--bdr);background:none;color:var(--mut);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.note-btn.has{border-color:var(--pri-b);color:var(--pri-d);background:var(--pri-l)}
+
+/* ── KPI SECTION ── */
+.kpi-section-hd{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;padding:14px 2px 7px}
+.kpi-card{background:var(--card);border-radius:12px;margin-bottom:10px;box-shadow:var(--shd);overflow:hidden}
+.kpi-card-hd{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--bdr)}
+.kpi-bar{width:3px;height:14px;border-radius:2px;flex-shrink:0}
+.kpi-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+.kpi-field{display:flex;align-items:center;gap:10px;padding:10px 13px;border-bottom:1px solid var(--bdr)}
+.kpi-field:last-child{border-bottom:none}
+.kfi-emo{font-size:18px;flex-shrink:0;width:28px;text-align:center}
+.kfi-lbl{flex:1;font-size:12.5px;font-weight:500;color:var(--txt)}
+.kfi-tgt{font-size:10px;color:var(--mut);margin-top:1px}
+.kfi-inp{width:110px;padding:7px 10px;border:1.5px solid var(--bdr);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;color:var(--txt);background:var(--card2);outline:none;text-align:right;-webkit-appearance:none}
+.kfi-inp:focus{border-color:var(--pri);background:var(--card)}
+.omzet-card{background:linear-gradient(135deg,var(--ch),#2D3142);border-radius:12px;margin-bottom:10px;box-shadow:var(--shd);overflow:hidden}
+.omzet-hd{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid rgba(255,255,255,.08)}
+.omzet-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--pri)}
+.omzet-field{display:flex;align-items:center;gap:10px;padding:10px 13px;border-bottom:1px solid rgba(255,255,255,.06)}
+.omzet-field:last-child{border-bottom:none}
+.omzet-lbl{flex:1;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.8)}
+.omzet-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+.omzet-inp{width:130px;padding:7px 10px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.08);outline:none;text-align:right;-webkit-appearance:none}
+.omzet-inp:focus{border-color:var(--pri)}
+
+/* ── EVALUASI TAB ── */
+.verdict-card{border-radius:14px;padding:18px;margin-bottom:12px;color:#fff;position:relative;overflow:hidden}
+.verdict-card.berdampak{background:linear-gradient(135deg,#14532D,#16A34A)}
+.verdict-card.stagnan  {background:linear-gradient(135deg,#3A2800,#D97706)}
+.verdict-card.menurun  {background:linear-gradient(135deg,#7F1D1D,#DC2626)}
+.verdict-card.nodata   {background:linear-gradient(135deg,#252830,#3D4050)}
+.vd-label{font-size:10px;font-weight:600;opacity:.6;text-transform:uppercase;letter-spacing:.09em;margin-bottom:6px}
+.vd-verdict{font-size:32px;font-weight:700;line-height:1}
+.vd-sub{font-size:12px;opacity:.65;margin-top:5px;line-height:1.5}
+.vd-change{font-size:20px;font-weight:700;margin-top:10px;display:flex;align-items:center;gap:8px}
+.vd-change-lbl{font-size:11px;opacity:.6}
+
+.chart-card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:var(--shd)}
+.chart-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt);margin-bottom:12px}
+.chart-legend{display:flex;gap:14px;margin-bottom:8px}
+.leg-dot{width:8px;height:8px;border-radius:2px}
+.leg-lbl{font-size:10px;color:var(--mut)}
+
+.activity-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+.act-tile{background:var(--card);border-radius:10px;padding:11px 12px;box-shadow:var(--shd)}
+.act-pilar{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.act-pct{font-size:22px;font-weight:700;line-height:1}
+.act-sub{font-size:10px;color:var(--mut);margin-top:2px}
+.act-bar{margin-top:6px;background:var(--bdr);border-radius:99px;height:4px;overflow:hidden}
+.act-fill{height:100%;border-radius:99px;transition:width .5s}
+
+.sync-card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:var(--shd)}
+.sync-inp{width:100%;padding:9px 12px;border:1.5px solid var(--bdr);border-radius:9px;font-family:var(--font);font-size:12px;color:var(--txt);background:var(--card2);outline:none;margin-bottom:10px;-webkit-appearance:none}
+.sync-inp:focus{border-color:var(--pri)}
+code{font-size:10px;font-family:monospace;background:var(--card2);border:1px solid var(--bdr);padding:10px;border-radius:8px;display:block;word-break:break-all;line-height:1.6;color:var(--mut);margin-top:6px;overflow-x:auto;white-space:pre-wrap}
+
+/* ── MODAL ── */
+.modal-ovl{display:none;position:fixed;inset:0;background:var(--ovl);z-index:200;align-items:flex-end;justify-content:center}
+.modal-ovl.show{display:flex}
+.modal-sheet{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,16px);transition:background .3s}
+.modal-handle{width:40px;height:4px;background:var(--bdr);border-radius:2px;margin:12px auto 0}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 17px;border-bottom:1px solid var(--bdr)}
+.modal-title{font-size:14px;font-weight:700}
+.modal-close{width:28px;height:28px;border-radius:14px;border:none;background:var(--card2);color:var(--txt2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-body{padding:15px 17px}
+.fg{margin-bottom:12px}
+.flbl{font-size:11px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px}
+.finp{width:100%;padding:10px 12px;border:1.5px solid var(--bdr);border-radius:9px;font-family:var(--font);font-size:13.5px;color:var(--txt);background:var(--card2);outline:none;-webkit-appearance:none}
+.finp:focus{border-color:var(--pri);background:var(--card)}
+.ftarea{resize:vertical;min-height:80px;line-height:1.5}
+.st-sel-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}
+.st-sel-btn{padding:10px 4px;border-radius:9px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;border:2px solid var(--bdr);background:none;color:var(--mut);transition:all .15s;text-align:center}
+.ss-belum.active  {border-color:var(--bdr);background:var(--card2);color:var(--txt)}
+.ss-selesai.active{border-color:var(--grn-b);background:var(--grn-l);color:var(--grn)}
+.ss-kendala.active{border-color:var(--red-b);background:var(--red-l);color:var(--red)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:10px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.btn-pri{background:var(--pri);color:var(--ch)}
+.btn-dark{background:var(--ch);color:#fff}
+.btn-out{background:none;border:1.5px solid var(--bdr);color:var(--txt2)}
+.btn-sm{padding:7px 12px;font-size:11.5px;border-radius:8px}
+.slbl{font-size:10.5px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.09em;padding:14px 2px 6px;display:block}
+.main::-webkit-scrollbar{width:3px}
+.main::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="topbar-row">
+    <div>
+      <div class="brand-main">⬡ MM Dashboard</div>
+      <div class="brand-sub">Marketing Manager · Kubah Emas</div>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" id="theme-btn">
+        <svg id="theme-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="datebar">
+  <div class="datebar-inner">
+    <span id="date-display"></span>
+    <span class="date-hi">Beta Week — Solo Run</span>
+  </div>
+</div>
+
+<main class="main" id="main-scroll">
+  <div class="inner" id="content"></div>
+</main>
+
+<nav class="botnav">
+  <button class="navbtn active" data-nav="checklist">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    Checklist
+  </button>
+  <button class="navbtn" data-nav="kpi">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    KPI & Omzet
+  </button>
+  <button class="navbtn" data-nav="evaluasi">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+    Evaluasi
+  </button>
+</nav>
+
+<div class="modal-ovl" id="modal-ovl">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════
+const toDateKey = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today = () => toDateKey(new Date());
+const TODAY = today();
+const NOW = new Date();
+const DAYS_ID = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const DATE_FMT = NOW.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+const addDays = (d,n) => { const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+const getWeekStart = d => { const day=d.getDay(); const diff=day===0?-6:1-day; const r=new Date(d); r.setDate(d.getDate()+diff); r.setHours(0,0,0,0); return r; };
+const rp = n => { const a=Math.abs(n); if(a>=1e9) return 'Rp '+(n/1e9).toFixed(1).replace('.0','')+'M'; if(a>=1e6) return 'Rp '+(n/1e6).toFixed(1).replace('.0','')+'jt'; return 'Rp '+n.toLocaleString('id-ID'); };
+const fmtRibuan = v => { const n=String(v).replace(/\D/g,''); return n?n.replace(/\B(?=(\d{3})+(?!\d))/g,'.'):'' };
+const parseRibuan = v => parseInt(String(v).replace(/\./g,'').replace(/\D/g,''))||0;
+
+// ═══════════════════════════════════
+// TASKS
+// ═══════════════════════════════════
+const TASKS = [
+  {id:1,  jam:'08:00', pilar:'gmb', lbl:'GMB',         act:'Cek notifikasi GMB — balas review & pertanyaan baru',                         tgt:'Semua tertanggapi'},
+  {id:2,  jam:'08:10', pilar:'mkt', lbl:'Marketplace', act:'Cek chat masuk Marketplace — pastikan semua sudah dibalas',                    tgt:'100% terrespons <1 jam'},
+  {id:3,  jam:'08:20', pilar:'ads', lbl:'Meta Ads',    act:'Buka Ads Manager — catat CPL, CTR, dan spend hari ini',                       tgt:'CPL <Rp 20.000'},
+  {id:4,  jam:'08:35', pilar:'ads', lbl:'Meta Ads',    act:'Scale / Kill decision — scale ad CPL bagus, matikan yang boros',              tgt:'CPL <Rp 20rb scale · >Rp 30rb kill'},
+  {id:5,  jam:'09:00', pilar:'wa',  lbl:'Pipeline',    act:'Cek pipeline leads semua channel — tidak ada yang lolos >1 jam',              tgt:'0 leads terlewat'},
+  {id:6,  jam:'09:00', pilar:'gmb', lbl:'GMB',         act:'Buat post konten GMB (promo / tips / produk baru)',                           tgt:'1 post tayang minggu ini', days:[1]},
+  {id:7,  jam:'09:15', pilar:'gmb', lbl:'GMB',         act:'Upload 3–5 foto baru ke profil GMB (toko / produk / pengiriman)',             tgt:'Foto segar di profil', days:[1]},
+  {id:8,  jam:'10:00', pilar:'mkt', lbl:'Marketplace', act:'Buat 2 listing baru (foto profesional + judul SEO-based)',                    tgt:'2 listing aktif baru'},
+  {id:9,  jam:'11:00', pilar:'mkt', lbl:'Marketplace', act:'Refresh 2–3 listing agar posisi naik di feed',                               tgt:'2–3 listing di-refresh'},
+  {id:10, jam:'11:30', pilar:'mkt', lbl:'Marketplace', act:'Audit performa listing — mana paling banyak chat? Duplikasi format terbaiknya', tgt:'1 insight actionable'},
+  {id:11, jam:'14:00', pilar:'ads', lbl:'Meta Ads',    act:'Monitor performa siang — ada anomali CPL naik atau CTR turun?',               tgt:'Dalam batas normal'},
+  {id:12, jam:'15:30', pilar:'wa',  lbl:'Pipeline',    act:'Cek pipeline sore — follow up leads yang belum closing hari ini',             tgt:'Semua leads ter-follow up'},
+  {id:13, jam:'15:50', pilar:'ads', lbl:'Meta Ads',    act:'Brief Editor kalau ada kebutuhan creative untuk minggu ini',                  tgt:'Brief terkirim (kalau ada)'},
+];
+
+const PILAR_CFG = {
+  gmb: {lbl:'GMB',         color:'var(--c-gmb)', key:'gmb'},
+  mkt: {lbl:'Marketplace', color:'var(--c-mkt)', key:'mkt'},
+  ads: {lbl:'Meta Ads',    color:'var(--c-ads)', key:'ads'},
+  wa:  {lbl:'Pipeline',    color:'var(--c-wa)',  key:'wa'},
+};
+
+const KPI_SECTIONS = [
+  { id:'gmb', title:'Google My Business', color:'var(--c-gmb)', fields:[
+    {id:'gmb_views',   e:'👁', lbl:'Views Profil',   tgt:'Catat baseline'},
+    {id:'gmb_reviews', e:'⭐', lbl:'Review Baru',    tgt:'Target 3–5/minggu'},
+  ]},
+  { id:'mkt', title:'Facebook Marketplace', color:'var(--c-mkt)', fields:[
+    {id:'mkt_chat',   e:'💬', lbl:'Chat Masuk',       tgt:'Target 5+/hari'},
+    {id:'mkt_konv',   e:'➡', lbl:'Konversi ke WA',   tgt:'Target >30% dari chat'},
+  ]},
+  { id:'ads', title:'Meta Ads', color:'var(--c-ads)', fields:[
+    {id:'ads_cpl',   e:'💰', lbl:'CPL (Rp)',          tgt:'Target <Rp 20.000'},
+    {id:'ads_ctr',   e:'📊', lbl:'CTR (%)',           tgt:'Target >0.8%'},
+    {id:'ads_leads', e:'📥', lbl:'WA Leads Masuk',    tgt:'Target 5+/hari'},
+  ]},
+];
+
+// ═══════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════
+let CFG = { gsUrl:'' };
+const DK = d => 'mm_d_'+d;
+const loadDay = d => { try{return JSON.parse(localStorage.getItem(DK(d))||'{}')}catch(e){return{}} };
+const saveDay = (d,v) => localStorage.setItem(DK(d), JSON.stringify(v));
+const loadCfg = () => { try{const c=JSON.parse(localStorage.getItem('mm_cfg')||'null');if(c)CFG={...CFG,...c}}catch(e){} };
+const saveCfg = () => localStorage.setItem('mm_cfg', JSON.stringify(CFG));
+
+const getTd = () => loadDay(TODAY);
+const getStatus = id => { const d=getTd(); return d.tasks&&d.tasks[id]&&d.tasks[id].status||'BELUM'; };
+const getNote = id => { const d=getTd(); return d.tasks&&d.tasks[id]&&d.tasks[id].note||''; };
+const getKPI = () => { const d=getTd(); return d.kpi||{}; };
+const setStatus = (id,st) => { const d=getTd(); if(!d.tasks)d.tasks={}; if(!d.tasks[id])d.tasks[id]={}; d.tasks[id].status=st; saveDay(TODAY,d); };
+const setNote   = (id,n)  => { const d=getTd(); if(!d.tasks)d.tasks={}; if(!d.tasks[id])d.tasks[id]={}; d.tasks[id].note=n; saveDay(TODAY,d); };
+const setKPI = (f,v) => { const d=getTd(); if(!d.kpi)d.kpi={}; d.kpi[f]=v; saveDay(TODAY,d); };
+
+// ═══════════════════════════════════
+// CALCULATIONS
+// ═══════════════════════════════════
+const calcDone = d => {
+  const dow = new Date().getDay();
+  const vis = TASKS.filter(t => !t.days || t.days.includes(dow));
+  return !d||!d.tasks ? 0 : vis.filter(t=>d.tasks[t.id]&&d.tasks[t.id].status==='SELESAI').length;
+};
+
+function getWeekOmzet(weeksAgo) {
+  const mon = getWeekStart(addDays(new Date(), -weeksAgo*7));
+  let total = 0;
+  for(let i=0;i<7;i++) {
+    const d = loadDay(toDateKey(addDays(mon,i)));
+    if(d.kpi&&d.kpi.omzet_total) total += parseInt(d.kpi.omzet_total)||0;
+  }
+  return total;
+}
+
+function getVerdict() {
+  const cur = getWeekOmzet(0);
+  const old = getWeekOmzet(2);
+  if(old === 0 || cur === 0) return null;
+  const pct = (cur - old) / old * 100;
+  if(pct > 10)  return {verdict:'BERDAMPAK', cls:'berdampak', icon:'↑', pct, cur, old};
+  if(pct < -10) return {verdict:'MENURUN',   cls:'menurun',   icon:'↓', pct, cur, old};
+  return          {verdict:'STAGNAN',    cls:'stagnan',    icon:'→', pct, cur, old};
+}
+
+function getLast4WeeksOmzet() {
+  return [3,2,1,0].map(w => {
+    const mon = getWeekStart(addDays(new Date(),-w*7));
+    const lbl = mon.toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+    return { lbl, val: getWeekOmzet(w) };
+  });
+}
+
+function getPilarActivity(pilarKey) {
+  const dow = new Date().getDay();
+  const tasks = TASKS.filter(t => t.pilar===pilarKey && (!t.days || t.days.includes(dow)));
+  const d = getTd();
+  const done = tasks.filter(t=>d.tasks&&d.tasks[t.id]&&d.tasks[t.id].status==='SELESAI').length;
+  return tasks.length>0?Math.round(done/tasks.length*100):0;
+}
+
+// ═══════════════════════════════════
+// STATE
+// ═══════════════════════════════════
+const ST = { tab:'checklist' };
+let _selSt = '';
+
+// ═══════════════════════════════════
+// VIEW: CHECKLIST
+// ═══════════════════════════════════
+function vChecklist() {
+  const d = getTd();
+  const dow = new Date().getDay();
+  const vis = TASKS.filter(t => !t.days || t.days.includes(dow));
+  const done = vis.filter(t => getStatus(t.id) === 'SELESAI').length;
+  const pct = Math.round(done / vis.length * 100);
+  const pills = vis.map(t => {
+    const ok = getStatus(t.id) === 'SELESAI';
+    return `<span class="ph-pill ${ok?'done':''}">${t.id}</span>`;
+  }).join('');
+
+  const cards = vis.map(t=>{
+    const st=getStatus(t.id), note=getNote(t.id);
+    const pc=PILAR_CFG[t.pilar];
+    const stCls='st-'+st.toLowerCase();
+    const ST_LBL={BELUM:'● BELUM',SELESAI:'✓ SELESAI',KENDALA:'⚠ KENDALA'};
+    const dayBadge = t.days ? `<span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;background:var(--pri-l);color:var(--pri-d);border:1px solid var(--pri-b)">SENIN</span>` : '';
+    return `<div class="task-card ${t.pilar} ${st==='SELESAI'?'st-selesai':''}">
+<div class="task-meta">
+  <div class="task-num">${t.id}</div>
+  <div class="task-time">⏰ ${t.jam}</div>
+  <span class="pilar-badge" style="color:${pc.color};background:${pc.color}18;border-color:${pc.color}35">${pc.lbl}</span>
+  ${dayBadge}
+</div>
+<div class="task-body" data-tb="${t.id}">
+  <div class="task-act ${st==='SELESAI'?'done':''}">${t.act}</div>
+  <div class="task-tgt">🎯 ${t.tgt}</div>
+</div>
+<div class="task-footer">
+  <button class="st-badge ${stCls}" data-cy="${t.id}">${ST_LBL[st]}</button>
+  <div class="note-preview">${note?'📝 '+note:''}</div>
+  <button class="note-btn ${note?'has':''}" data-nt="${t.id}">📝</button>
+</div>
+</div>`;
+  }).join('');
+
+  return `<div class="prog-hero">
+<div class="ph-row"><div class="ph-title">Checklist Hari Ini</div><div class="ph-score">${done}/${TASKS.length} · ${pct}%</div></div>
+<div class="ph-track"><div class="ph-fill" style="width:${pct}%"></div></div>
+<div class="ph-pills">${pills}</div>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;padding:2px 2px 12px">
+  ${['gmb','mkt','ads','wa'].map(p=>{const c=PILAR_CFG[p];return`<div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--mut)"><div style="width:10px;height:10px;border-radius:2px;background:${c.color}"></div>${c.lbl}</div>`}).join('')}
+</div>
+${cards}`;
+}
+
+// ═══════════════════════════════════
+// VIEW: KPI & OMZET
+// ═══════════════════════════════════
+function vKPI() {
+  const kpi = getKPI();
+  const kpiSections = KPI_SECTIONS.map(sec=>{
+    const fields = sec.fields.map(f=>{
+      const v = kpi[f.id]!==undefined?kpi[f.id]:'';
+      return `<div class="kpi-field">
+<div class="kfi-emo">${f.e}</div>
+<div style="flex:1"><div class="kfi-lbl">${f.lbl}</div><div class="kfi-tgt">${f.tgt}</div></div>
+<input class="kfi-inp" type="number" inputmode="decimal" min="0" placeholder="0" value="${v}" data-kf="${f.id}">
+</div>`;
+    }).join('');
+    return `<div class="kpi-card">
+<div class="kpi-card-hd"><div class="kpi-bar" style="background:${sec.color}"></div><div class="kpi-title" style="color:${sec.color}">${sec.title}</div></div>
+${fields}
+</div>`;
+  }).join('');
+
+  const omzWARaw=kpi.omzet_wa?parseInt(kpi.omzet_wa):0;
+  const omzTotalRaw=kpi.omzet_total?parseInt(kpi.omzet_total):0;
+  const omzWA=omzWARaw?fmtRibuan(omzWARaw):'';
+  const omzTotal=omzTotalRaw?fmtRibuan(omzTotalRaw):'';
+  const omzPct=omzTotalRaw&&omzWARaw&&omzTotalRaw>0?Math.round(omzWARaw/omzTotalRaw*100):null;
+
+  return `${kpiSections}
+<div class="omzet-card">
+<div class="omzet-hd"><span style="font-size:18px">💵</span><div class="omzet-title">Omzet Toko Hari Ini</div></div>
+<div class="omzet-field">
+  <div style="flex:1"><div class="omzet-lbl">Omzet dari WA / Digital</div><div class="omzet-sub">Leads dari Marketplace, Ads, GMB</div></div>
+  <input class="omzet-inp" type="text" inputmode="numeric" placeholder="0" value="${omzWA}" data-kf="omzet_wa">
+</div>
+<div class="omzet-field">
+  <div style="flex:1"><div class="omzet-lbl">Omzet Total Toko</div><div class="omzet-sub">Semua channel termasuk walk-in${omzPct!==null?' · '+omzPct+'% dari digital':''}</div></div>
+  <input class="omzet-inp" type="text" inputmode="numeric" placeholder="0" value="${omzTotal}" data-kf="omzet_total">
+</div>
+</div>
+<div style="padding:4px 2px 2px;font-size:11px;color:var(--mut);line-height:1.6">Data tersimpan otomatis. Omzet ini dipakai untuk menghitung verdict mingguan di tab Evaluasi.</div>`;
+}
+
+// ═══════════════════════════════════
+// VIEW: EVALUASI
+// ═══════════════════════════════════
+function vEvaluasi() {
+  const vd = getVerdict();
+  let verdictHTML;
+  if(!vd) {
+    verdictHTML = `<div class="verdict-card nodata">
+<div class="vd-label">Verdict Mingguan</div>
+<div class="vd-verdict">Belum Ada Data</div>
+<div class="vd-sub">Isi omzet total toko minimal 2 minggu untuk melihat verdict. Data pertama akan mulai terbaca minggu depan.</div>
+</div>`;
+  } else {
+    const desc = vd.verdict==='BERDAMPAK'
+      ? 'Omzet naik vs 2 minggu lalu. Aktivitas marketing berkontribusi positif.'
+      : vd.verdict==='MENURUN'
+      ? 'Omzet turun vs 2 minggu lalu. Evaluasi strategi dan eksekusi yang berjalan.'
+      : 'Omzet belum bergerak signifikan. Pertahankan aktivitas, hasil biasanya terasa 2–4 minggu kemudian.';
+    verdictHTML = `<div class="verdict-card ${vd.cls}">
+<div class="vd-label">Verdict vs 2 Minggu Lalu</div>
+<div class="vd-verdict">${vd.icon} ${vd.verdict}</div>
+<div class="vd-sub">${desc}</div>
+<div class="vd-change">
+  <span>${vd.pct>0?'+':''}${vd.pct.toFixed(1)}%</span>
+  <span class="vd-change-lbl">${rp(vd.cur)} vs ${rp(vd.old)}</span>
+</div>
+</div>`;
+  }
+
+  // 4-week chart
+  const weeks = getLast4WeeksOmzet();
+  const maxV = Math.max(1, ...weeks.map(w=>w.val));
+  const H=60, bW=40, col=70;
+  const bars = weeks.map((w,i)=>{
+    const x=i*col, h=Math.max(2,w.val/maxV*H);
+    const clr=w.val>0?'var(--pri)':'var(--bdr)';
+    return `<rect x="${x}" y="${H-h}" width="${bW}" height="${h}" fill="${clr}" rx="4"/>
+<text x="${x+bW/2}" y="${H+13}" font-size="8.5" text-anchor="middle" fill="var(--mut)" font-family="Poppins,sans-serif">${w.lbl}</text>`;
+  }).join('');
+  const chartHTML = `<div class="chart-card">
+<div class="chart-title">Omzet Total 4 Minggu Terakhir</div>
+<svg width="100%" viewBox="0 0 ${weeks.length*col} ${H+18}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">${bars}</svg>
+</div>`;
+
+  // Activity summary per pilar
+  const actHTML = `<span class="slbl">Activity Score Per Pilar (Hari Ini)</span>
+<div class="activity-summary">
+${['gmb','mkt','ads','wa'].map(p=>{
+  const pc=PILAR_CFG[p], pct=getPilarActivity(p);
+  const c=pct>=80?'var(--grn)':pct>=50?'var(--pri-d)':'var(--mut)';
+  return `<div class="act-tile">
+<div class="act-pilar" style="color:${pc.color}">${pc.lbl}</div>
+<div class="act-pct" style="color:${c}">${pct}%</div>
+<div class="act-sub">${TASKS.filter(t=>t.pilar===p).filter(t=>getStatus(t.id)==='SELESAI').length}/${TASKS.filter(t=>t.pilar===p).length} task</div>
+<div class="act-bar"><div class="act-fill" style="width:${pct}%;background:${pc.color}"></div></div>
+</div>`;
+}).join('')}
+</div>`;
+
+  return `${verdictHTML}${chartHTML}${actHTML}
+<div class="sync-card">
+<div style="font-size:12px;font-weight:700;color:var(--txt);margin-bottom:8px">📤 Kirim Laporan ke Google Sheets</div>
+<div style="font-size:11.5px;color:var(--mut);margin-bottom:10px;line-height:1.6">Checklist + KPI + Omzet hari ini dikirim ke Google Sheets untuk laporan ke CEO.</div>
+<input class="sync-inp" id="gs-url" type="url" placeholder="https://script.google.com/..." value="${CFG.gsUrl||''}">
+<div style="display:flex;gap:8px">
+  <button class="btn btn-dark" style="flex:1" id="btn-kirim">📤 Kirim Laporan Hari Ini</button>
+  <button class="btn btn-out btn-sm" id="btn-csv">⬇ CSV</button>
+</div>
+<div id="sync-st" style="font-size:11px;text-align:center;margin-top:8px;color:var(--mut)"></div>
+</div>
+<div class="sync-card">
+<div style="font-size:12px;font-weight:700;color:var(--txt);margin-bottom:6px">⚙ Setup Apps Script</div>
+<div style="font-size:11.5px;color:var(--mut);line-height:1.7;margin-bottom:8px">
+  1. Buka <strong>script.google.com</strong> dari dalam Google Sheet<br>
+  2. Hapus kode default → paste kode di bawah<br>
+  3. <strong>Deploy → Web App → Execute as Me → Anyone</strong><br>
+  4. Copy URL /exec → paste di kolom atas
+</div>
+<code>function doPost(e){try{var d=JSON.parse(e.postData.contents);var ss=SpreadsheetApp.getActiveSpreadsheet();var ts=Utilities.formatDate(new Date(),'Asia/Jakarta','dd/MM/yyyy HH:mm');var logSh=ss.getSheetByName('Log MM')||ss.insertSheet('Log MM');if(logSh.getLastRow()==0)logSh.appendRow(['Timestamp','Tanggal','No','Pilar','Aktivitas','Status','Catatan']);d.tasks.forEach(function(t){logSh.appendRow([ts,d.tanggal,t.no,t.pilar,t.aktivitas,t.status,t.catatan||'']);});var kSh=ss.getSheetByName('KPI Harian MM')||ss.insertSheet('KPI Harian MM');if(kSh.getLastRow()==0)kSh.appendRow(['Timestamp','Tanggal','Checklist%','GMB Views','GMB Review','MKT Chat','MKT Konv WA','Ads CPL','Ads CTR','Ads Leads','Omzet WA','Omzet Total']);var k=d.kpi;kSh.appendRow([ts,d.tanggal,d.pct+'%',k.gmb_views||0,k.gmb_reviews||0,k.mkt_chat||0,k.mkt_konv||0,k.ads_cpl||0,k.ads_ctr||0,k.ads_leads||0,k.omzet_wa||0,k.omzet_total||0]);return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);}catch(ex){return ContentService.createTextOutput(JSON.stringify({ok:false,err:ex.toString()})).setMimeType(ContentService.MimeType.JSON);}}</code>
+</div>`;
+}
+
+// ═══════════════════════════════════
+// MODAL: TASK DETAIL
+// ═══════════════════════════════════
+function mTask(id) {
+  const t = TASKS.find(x=>x.id===id); if(!t)return'';
+  const pc = PILAR_CFG[t.pilar];
+  const curSt = getStatus(id), curNote = getNote(id);
+  const ST_LBL={BELUM:'● BELUM',SELESAI:'✓ SELESAI',KENDALA:'⚠ KENDALA'};
+  const stBtns = ['BELUM','SELESAI','KENDALA'].map(s=>{
+    const cls='ss-'+s.toLowerCase();
+    return `<button class="st-sel-btn ${cls} ${curSt===s?'active':''}" data-sp="${s}">${ST_LBL[s]}</button>`;
+  }).join('');
+  return `<div class="modal-hd">
+<div><div class="modal-title">Task #${id}</div><div style="font-size:10px;color:var(--mut);margin-top:1px">${t.jam} · ${pc.lbl}</div></div>
+<button class="modal-close" id="mc-close">×</button>
+</div>
+<div class="modal-body">
+<div style="background:${pc.color}18;border:1px solid ${pc.color}35;border-radius:10px;padding:11px 13px;margin-bottom:14px">
+  <div style="font-size:10px;font-weight:700;color:${pc.color};text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">${pc.lbl} · ${t.jam}</div>
+  <div style="font-size:13px;font-weight:500;color:var(--txt);line-height:1.5">${t.act}</div>
+  <div style="font-size:10.5px;color:var(--mut);margin-top:5px">🎯 ${t.tgt}</div>
+</div>
+<div class="fg"><label class="flbl">Status</label><div class="st-sel-row" id="st-sel-row">${stBtns}</div></div>
+<div class="fg"><label class="flbl">Catatan / Realisasi</label><textarea class="finp ftarea" id="task-note">${curNote}</textarea></div>
+<button class="btn btn-pri" style="width:100%" id="task-save" data-tid="${id}">Simpan</button>
+</div>`;
+}
+
+// ═══════════════════════════════════
+// SYNC & EXPORT
+// ═══════════════════════════════════
+function buildPayload() {
+  const d = getTd(); const kpi = d.kpi||{};
+  const dow = new Date().getDay();
+  const vis = TASKS.filter(t => !t.days || t.days.includes(dow));
+  const done = calcDone(d);
+  return {
+    tanggal: TODAY,
+    pct: Math.round(done/vis.length*100),
+    tasks: vis.map(t=>({
+      no:t.id, pilar:PILAR_CFG[t.pilar].lbl, jam:t.jam,
+      aktivitas:t.act,
+      status:(d.tasks&&d.tasks[t.id]&&d.tasks[t.id].status)||'BELUM',
+      catatan:(d.tasks&&d.tasks[t.id]&&d.tasks[t.id].note)||''
+    })),
+    kpi
+  };
+}
+
+async function syncGS() {
+  const url = document.getElementById('gs-url')?.value.trim();
+  const st = document.getElementById('sync-st');
+  if(!url){if(st){st.textContent='Masukkan URL Apps Script terlebih dahulu.';st.style.color='var(--red)';}return;}
+  CFG.gsUrl=url; saveCfg();
+  if(st){st.textContent='Mengirim data...';st.style.color='var(--mut)';}
+  try{
+    await fetch(url,{method:'POST',mode:'no-cors',body:JSON.stringify(buildPayload())});
+    if(st){st.textContent='✓ Laporan berhasil dikirim ke Google Sheets!';st.style.color='var(--grn)';}
+  }catch(e){
+    if(st){st.textContent='✓ Permintaan terkirim. Cek Google Sheets Anda.';st.style.color='var(--grn)';}
+  }
+}
+
+function exportCSV() {
+  const p = buildPayload();
+  const q = s => '"'+String(s||'').replace(/"/g,'""')+'"';
+  const row = a => a.map(q).join(',')+'\n';
+  let csv='\uFEFF';
+  csv+=row(['MM DASHBOARD — LAPORAN HARIAN KUBAH EMAS']);
+  csv+=row(['Tanggal',p.tanggal,'Checklist',p.pct+'%']);
+  csv+='\n'+row(['=== AKTIVITAS ===']);
+  csv+=row(['No','Pilar','Jam','Aktivitas','Status','Catatan']);
+  p.tasks.forEach(t=>csv+=row([t.no,t.pilar,t.jam,t.aktivitas,t.status,t.catatan]));
+  csv+='\n'+row(['=== KPI & OMZET ===']);
+  const kf=[['gmb_views','GMB Views'],['gmb_reviews','GMB Review Baru'],['mkt_chat','Marketplace Chat'],['mkt_konv','Konversi ke WA'],['ads_cpl','Meta Ads CPL (Rp)'],['ads_ctr','Meta Ads CTR (%)'],['ads_leads','WA Leads Masuk'],['omzet_wa','Omzet WA (Rp)'],['omzet_total','Omzet Total (Rp)']];
+  kf.forEach(([k,l])=>csv+=row([l,p.kpi[k]||0]));
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='mm-laporan-'+TODAY+'.csv';a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════
+// RENDER
+// ═══════════════════════════════════
+function render(keepScroll) {
+  const ms = document.getElementById('main-scroll');
+  const sp = keepScroll ? ms.scrollTop : 0;
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.nav===ST.tab));
+  const c = document.getElementById('content');
+  if(ST.tab==='checklist') c.innerHTML=vChecklist();
+  if(ST.tab==='kpi')       c.innerHTML=vKPI();
+  if(ST.tab==='evaluasi')  c.innerHTML=vEvaluasi();
+  ms.scrollTop=sp;
+}
+
+function openModal(html) {
+  document.getElementById('modal-content').innerHTML=html;
+  document.getElementById('modal-ovl').classList.add('show');
+}
+function closeModal() { document.getElementById('modal-ovl').classList.remove('show'); }
+
+// ═══════════════════════════════════
+// EVENTS
+// ═══════════════════════════════════
+document.addEventListener('click', e => {
+  const nav=e.target.closest('.navbtn');
+  if(nav){ST.tab=nav.dataset.nav;render();return;}
+  if(e.target.closest('#mc-close')||e.target===document.getElementById('modal-ovl')){closeModal();return;}
+  if(e.target.closest('#theme-btn')){toggleTheme();return;}
+
+  const cy=e.target.closest('[data-cy]');
+  if(cy){const id=parseInt(cy.dataset.cy);const cur=getStatus(id);const nx=cur==='BELUM'?'SELESAI':cur==='SELESAI'?'KENDALA':'BELUM';setStatus(id,nx);render(true);return;}
+
+  const nt=e.target.closest('[data-nt]');
+  if(nt){_selSt=getStatus(parseInt(nt.dataset.nt));openModal(mTask(parseInt(nt.dataset.nt)));return;}
+
+  const tb=e.target.closest('[data-tb]');
+  if(tb){_selSt=getStatus(parseInt(tb.dataset.tb));openModal(mTask(parseInt(tb.dataset.tb)));return;}
+
+  const sp=e.target.closest('[data-sp]');
+  if(sp){_selSt=sp.dataset.sp;document.querySelectorAll('[data-sp]').forEach(b=>b.classList.remove('active'));sp.classList.add('active');return;}
+
+  const ts=e.target.closest('#task-save');
+  if(ts){const tid=parseInt(ts.dataset.tid);const note=document.getElementById('task-note').value;setStatus(tid,_selSt||getStatus(tid));setNote(tid,note);closeModal();render(true);return;}
+
+  if(e.target.closest('#btn-kirim')){syncGS();return;}
+  if(e.target.closest('#btn-csv')){exportCSV();return;}
+});
+
+document.addEventListener('input', e=>{
+  const kf=e.target.closest('[data-kf]');
+  if(kf){
+    const field=kf.dataset.kf;
+    if(field==='omzet_wa'||field==='omzet_total'){
+      const raw=kf.value.replace(/\./g,'').replace(/\D/g,'');
+      kf.value=raw?fmtRibuan(raw):'';
+      setKPI(field,parseInt(raw)||0);
+    } else {
+      setKPI(field,kf.value);
+    }
+  }
+});
+
+// ═══════════════════════════════════
+// THEME
+// ═══════════════════════════════════
+function toggleTheme(){
+  const dark=document.body.classList.toggle('dark');
+  localStorage.setItem('mm_theme',dark?'dark':'light');
+  document.getElementById('tc').content=dark?'#0D0E10':'#1C1E26';
+  updateThemeIco(dark);render(true);
+}
+function updateThemeIco(dark){
+  const ico=document.getElementById('theme-ico');if(!ico)return;
+  ico.innerHTML=dark
+    ?'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    :'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+// ═══════════════════════════════════
+// PWA
+// ═══════════════════════════════════
+const ICON=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD700"/><stop offset="100%" stop-color="#D97706"/></linearGradient></defs>
+<rect width="512" height="512" rx="115" fill="url(#g)"/>
+<text x="256" y="260" font-family="Arial Black,Arial,sans-serif" font-size="185" font-weight="900" fill="#1C1E26" text-anchor="middle">MM</text>
+<polyline points="100,390 185,310 270,345 380,245" fill="none" stroke="#1C1E26" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+<polyline points="370,245 380,245 380,265" fill="none" stroke="#1C1E26" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+</svg>`;
+const ICON_URI='data:image/svg+xml;base64,'+btoa(ICON);
+const tl=document.getElementById('touch-icon');if(tl)tl.href=ICON_URI;
+try{
+  const m={name:'MM Dashboard — Kubah Emas',short_name:'MM Tracker',description:'Marketing Manager Daily Dashboard',start_url:'./',display:'standalone',orientation:'portrait',background_color:'#FAFAF3',theme_color:'#1C1E26',icons:[{src:ICON_URI,sizes:'512x512',type:'image/svg+xml',purpose:'any maskable'}]};
+  const bl=new Blob([JSON.stringify(m)],{type:'application/json'});
+  document.getElementById('pwa-manifest').href=URL.createObjectURL(bl);
+}catch(e){}
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+document.getElementById('date-display').textContent=DATE_FMT;
+loadCfg();
+const th=localStorage.getItem('mm_theme');
+if(th==='dark'){document.body.classList.add('dark');document.getElementById('tc').content='#0D0E10';updateThemeIco(true);}
+render();
+</script>
+</body>
+</html>
