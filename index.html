@@ -51,7 +51,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);height:100dvh
 .date-hi{color:var(--pri);font-weight:600}
 
 /* ── MAIN ── */
-.main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 .inner{padding:14px 14px 20px;max-width:640px;margin:0 auto}
 
 /* ── BOTTOM NAV ── */
@@ -107,7 +107,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);height:100dvh
 .kfi-emo{font-size:18px;flex-shrink:0;width:28px;text-align:center}
 .kfi-lbl{flex:1;font-size:12.5px;font-weight:500;color:var(--txt)}
 .kfi-tgt{font-size:10px;color:var(--mut);margin-top:1px}
-.kfi-inp{width:110px;padding:7px 10px;border:1.5px solid var(--bdr);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;color:var(--txt);background:var(--card2);outline:none;text-align:right;-webkit-appearance:none}
+.kfi-inp{width:80px;padding:6px 8px;border:1.5px solid var(--bdr);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;color:var(--txt);background:var(--card2);outline:none;text-align:right;-webkit-appearance:none}
 .kfi-inp:focus{border-color:var(--pri);background:var(--card)}
 .omzet-card{background:linear-gradient(135deg,var(--ch),#2D3142);border-radius:12px;margin-bottom:10px;box-shadow:var(--shd);overflow:hidden}
 .omzet-hd{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid rgba(255,255,255,.08)}
@@ -116,8 +116,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);height:100dvh
 .omzet-field:last-child{border-bottom:none}
 .omzet-lbl{flex:1;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.8)}
 .omzet-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
-.omzet-inp{width:130px;padding:7px 10px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.08);outline:none;text-align:right;-webkit-appearance:none}
+.omzet-inp{width:110px;padding:7px 10px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.08);outline:none;text-align:right;-webkit-appearance:none}
 .omzet-inp:focus{border-color:var(--pri)}
+.kpi-card,.omzet-card{overflow:hidden}
 
 /* ── EVALUASI TAB ── */
 .verdict-card{border-radius:14px;padding:18px;margin-bottom:12px;color:#fff;position:relative;overflow:hidden}
