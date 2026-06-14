@@ -102,21 +102,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);height:100dvh
 .kpi-card-hd{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--bdr)}
 .kpi-bar{width:3px;height:14px;border-radius:2px;flex-shrink:0}
 .kpi-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
-.kpi-field{display:flex;align-items:center;gap:10px;padding:10px 13px;border-bottom:1px solid var(--bdr)}
+.kpi-field{padding:10px 13px;border-bottom:1px solid var(--bdr)}
 .kpi-field:last-child{border-bottom:none}
-.kfi-emo{font-size:18px;flex-shrink:0;width:28px;text-align:center}
-.kfi-lbl{flex:1;font-size:12.5px;font-weight:500;color:var(--txt)}
+.kfi-head{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.kfi-emo{font-size:18px;flex-shrink:0;width:26px;text-align:center}
+.kfi-lbl{font-size:12.5px;font-weight:500;color:var(--txt)}
 .kfi-tgt{font-size:10px;color:var(--mut);margin-top:1px}
-.kfi-inp{width:80px;padding:6px 8px;border:1.5px solid var(--bdr);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;color:var(--txt);background:var(--card2);outline:none;text-align:right;-webkit-appearance:none}
+.kfi-inp{width:100%;padding:8px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:600;color:var(--txt);background:var(--card2);outline:none;-webkit-appearance:none}
 .kfi-inp:focus{border-color:var(--pri);background:var(--card)}
 .omzet-card{background:linear-gradient(135deg,var(--ch),#2D3142);border-radius:12px;margin-bottom:10px;box-shadow:var(--shd);overflow:hidden}
 .omzet-hd{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid rgba(255,255,255,.08)}
 .omzet-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--pri)}
-.omzet-field{display:flex;align-items:center;gap:10px;padding:10px 13px;border-bottom:1px solid rgba(255,255,255,.06)}
+.omzet-field{padding:10px 13px;border-bottom:1px solid rgba(255,255,255,.06)}
 .omzet-field:last-child{border-bottom:none}
-.omzet-lbl{flex:1;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.8)}
-.omzet-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
-.omzet-inp{width:110px;padding:7px 10px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.08);outline:none;text-align:right;-webkit-appearance:none}
+.omzet-lbl{font-size:12.5px;font-weight:500;color:rgba(255,255,255,.8)}
+.omzet-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px;margin-bottom:7px}
+.omzet-inp{width:100%;padding:8px 12px;border:1.5px solid rgba(255,255,255,.15);border-radius:8px;font-family:var(--font);font-size:13px;font-weight:600;color:#fff;background:rgba(255,255,255,.1);outline:none;-webkit-appearance:none}
 .omzet-inp:focus{border-color:var(--pri)}
 .kpi-card,.omzet-card{overflow:hidden}
 
@@ -416,8 +417,10 @@ function vKPI() {
     const fields = sec.fields.map(f=>{
       const v = kpi[f.id]!==undefined?kpi[f.id]:'';
       return `<div class="kpi-field">
-<div class="kfi-emo">${f.e}</div>
-<div style="flex:1"><div class="kfi-lbl">${f.lbl}</div><div class="kfi-tgt">${f.tgt}</div></div>
+<div class="kfi-head">
+  <span class="kfi-emo">${f.e}</span>
+  <div><div class="kfi-lbl">${f.lbl}</div><div class="kfi-tgt">Target: ${f.tgt}</div></div>
+</div>
 <input class="kfi-inp" type="number" inputmode="decimal" min="0" placeholder="0" value="${v}" data-kf="${f.id}">
 </div>`;
     }).join('');
@@ -437,11 +440,13 @@ ${fields}
 <div class="omzet-card">
 <div class="omzet-hd"><span style="font-size:18px">💵</span><div class="omzet-title">Omzet Toko Hari Ini</div></div>
 <div class="omzet-field">
-  <div style="flex:1"><div class="omzet-lbl">Omzet dari WA / Digital</div><div class="omzet-sub">Leads dari Marketplace, Ads, GMB</div></div>
+  <div class="omzet-lbl">Omzet dari WA / Digital</div>
+  <div class="omzet-sub">Leads dari Marketplace, Ads, GMB${omzPct!==null?' · '+omzPct+'% dari total':''}</div>
   <input class="omzet-inp" type="text" inputmode="numeric" placeholder="0" value="${omzWA}" data-kf="omzet_wa">
 </div>
 <div class="omzet-field">
-  <div style="flex:1"><div class="omzet-lbl">Omzet Total Toko</div><div class="omzet-sub">Semua channel termasuk walk-in${omzPct!==null?' · '+omzPct+'% dari digital':''}</div></div>
+  <div class="omzet-lbl">Omzet Total Toko</div>
+  <div class="omzet-sub">Semua channel termasuk walk-in</div>
   <input class="omzet-inp" type="text" inputmode="numeric" placeholder="0" value="${omzTotal}" data-kf="omzet_total">
 </div>
 </div>
@@ -526,7 +531,7 @@ ${['gmb','mkt','ads','wa'].map(p=>{
   3. <strong>Deploy → Web App → Execute as Me → Anyone</strong><br>
   4. Copy URL /exec → paste di kolom atas
 </div>
-<code>function doPost(e){try{var d=JSON.parse(e.postData.contents);var ss=SpreadsheetApp.getActiveSpreadsheet();var ts=Utilities.formatDate(new Date(),'Asia/Jakarta','dd/MM/yyyy HH:mm');var logSh=ss.getSheetByName('Log MM')||ss.insertSheet('Log MM');if(logSh.getLastRow()==0)logSh.appendRow(['Timestamp','Tanggal','No','Pilar','Aktivitas','Status','Catatan']);d.tasks.forEach(function(t){logSh.appendRow([ts,d.tanggal,t.no,t.pilar,t.aktivitas,t.status,t.catatan||'']);});var kSh=ss.getSheetByName('KPI Harian MM')||ss.insertSheet('KPI Harian MM');if(kSh.getLastRow()==0)kSh.appendRow(['Timestamp','Tanggal','Checklist%','GMB Views','GMB Review','MKT Chat','MKT Konv WA','Ads CPL','Ads CTR','Ads Leads','Omzet WA','Omzet Total']);var k=d.kpi;kSh.appendRow([ts,d.tanggal,d.pct+'%',k.gmb_views||0,k.gmb_reviews||0,k.mkt_chat||0,k.mkt_konv||0,k.ads_cpl||0,k.ads_ctr||0,k.ads_leads||0,k.omzet_wa||0,k.omzet_total||0]);return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);}catch(ex){return ContentService.createTextOutput(JSON.stringify({ok:false,err:ex.toString()})).setMimeType(ContentService.MimeType.JSON);}}</code>
+<code>function doPost(e){try{var raw=e.parameter&&e.parameter.data?e.parameter.data:(e.postData&&e.postData.contents?e.postData.contents:'{}');var d=JSON.parse(raw);var ss=SpreadsheetApp.getActiveSpreadsheet();var ts=Utilities.formatDate(new Date(),'Asia/Jakarta','dd/MM/yyyy HH:mm');var logSh=ss.getSheetByName('Log MM')||ss.insertSheet('Log MM');if(logSh.getLastRow()==0)logSh.appendRow(['Timestamp','Tanggal','No','Pilar','Aktivitas','Status','Catatan']);d.tasks.forEach(function(t){logSh.appendRow([ts,d.tanggal,t.no,t.pilar,t.aktivitas,t.status,t.catatan||'']);});var kSh=ss.getSheetByName('KPI Harian MM')||ss.insertSheet('KPI Harian MM');if(kSh.getLastRow()==0)kSh.appendRow(['Timestamp','Tanggal','Checklist%','GMB Views','GMB Review','MKT Chat','MKT Konv WA','Ads CPL','Ads CTR','Ads Leads','Omzet WA','Omzet Total']);var k=d.kpi;kSh.appendRow([ts,d.tanggal,d.pct+'%',k.gmb_views||0,k.gmb_reviews||0,k.mkt_chat||0,k.mkt_konv||0,k.ads_cpl||0,k.ads_ctr||0,k.ads_leads||0,k.omzet_wa||0,k.omzet_total||0]);return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);}catch(ex){return ContentService.createTextOutput(JSON.stringify({ok:false,err:ex.toString()})).setMimeType(ContentService.MimeType.JSON);}}</code>
 </div>`;
 }
 
@@ -585,8 +590,17 @@ async function syncGS() {
   if(!url){if(st){st.textContent='Masukkan URL Apps Script terlebih dahulu.';st.style.color='var(--red)';}return;}
   CFG.gsUrl=url; saveCfg();
   if(st){st.textContent='Mengirim data...';st.style.color='var(--mut)';}
+  const body = 'data='+encodeURIComponent(JSON.stringify(buildPayload()));
   try{
-    await fetch(url,{method:'POST',mode:'no-cors',body:JSON.stringify(buildPayload())});
+    await new Promise((resolve)=>{
+      const xhr=new XMLHttpRequest();
+      xhr.open('POST',url,true);
+      xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+      xhr.onload=xhr.onerror=function(){resolve();};
+      xhr.ontimeout=function(){resolve();};
+      xhr.timeout=15000;
+      xhr.send(body);
+    });
     if(st){st.textContent='✓ Laporan berhasil dikirim ke Google Sheets!';st.style.color='var(--grn)';}
   }catch(e){
     if(st){st.textContent='✓ Permintaan terkirim. Cek Google Sheets Anda.';st.style.color='var(--grn)';}
